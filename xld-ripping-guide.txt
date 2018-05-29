@@ -1,0 +1,211 @@
+Summary
+
+This guide is an introduction that will teach you to configure XLD correctly, to rip a CD, and to check ripping (extraction) logs for a good CD rip. It is intended primarily as a beginners' guide, so some more advanced features are (currently) omitted. 
+
+Download XLD builds and source code from the following links: 
+https://sourceforge.net/projects/xld/files/
+http://tmkk.undo.jp/xld/index_e.html
+
+The official software page describes XLD
+[as] a tool for Mac OS X that is able to decode/convert/play various 'lossless' audio files. The supported audio files can be split into some tracks with cue sheet when decoding. It works on Mac OS X 10.3 and later. XLD is Universal Binary, so it runs natively on both Intel Macs and PPC Macs.
+It is strongly recommended to use version 20100704 (04 July 2010) or newer. If you are using an older version, then go to XLD menu > Check for Updates to make sure you have the latest version. 
+
+1. Configuration
+
+It is very important to properly configure XLD for lossless (FLAC) rips so that the ripping log will score 100% on the logchecker. 
+
+Logchecker Plugin
+
+There are several methods of adding LogChecker functionality.
+
+1. You can manually apply the plugin by putting the XLDLogChecker.bundle file into ~/Library/Application Support/XLD/PlugIns. You can go to this folder by using the "Go to Folder" option (cmd+shft+G) from within Finder and pasting the full path into the resulting text box. You can obtain this file via the RED Toolbox for OS X or download the XLDLogChecker-20121222.zip file from any of the sites listed above.
+
+2. Alternately, you can download and run an Automator Application that will download the file and install the bundle file for you.
+
+Once installed properly, you will see an option for "Log Checker" under the XLD menu. You will most likely have to restart XLD for the Log Checker to take effect.
+
+https://ptpimg.me/pycx56.png
+
+
+After checking for updates go to XLD menu > Preferences, or hit Command-; (Command is the key with the Apple logo).
+
+https://ptpimg.me/ewa9vp.png
+
+1. We will configure the General settings tab with the assumption that you will rip a disc to FLAC (and then transcode the FLAC files to MP3 if you desire).
+(1) The Output directory is set manually each time you rip a disc. If you wish to have a default directory for transcoding, then you may set it now. If you extract the files on your internal drive, pay attention to not set your default directory in your user account, given that the log will refer to it. Instead, you can create a directory for rips in the root of your mac (/rips) or another directory in /Users/ which doesn't conflict with another account.
+(2) Set Character encoding of cuesheet to Unicode (UTF-8).
+(3) Check the Automatically check for updates box. XLD will check for new versions whenever it is launched. The XLD developer frequently releases updates, so checking this box is highly recommended.
+(4) The Maximum #Threads setting is the number of simultaneous audio conversions that XLD will perform. If you have a multi-processor or multi-core Mac, you should change this setting from 2 to however many your system has. It should be set automatically.
+(5) DO NOT check the Correct "30 samples moved offset" problem box. In brief, if you have the box checked, then your CRCs will not match those of EAC or another ripper. There is no reason to check this box if you are ripping a CD. (For a more technical explanation, see this thread. This option can partially fix a problem with EAC's offset detection, but it is irrelevant for our purposes.)
+
+https://ptpimg.me/b0p6y5.png
+
+FLAC settings: click the Option button. Drag the Compression Level slider to High, and uncheck "Allow to embed cue sheet". Then click OK.
+https://ptpimg.me/4du7f1.png
+
+
+2. This is the File Naming Tab.
+
+(1) There are several options for filenames and directory names. It is ALWAYS recommended to include, at minimum, track number and track title in the filenames. A meaningful directory name is also required: the minimum is to include the album title. If you upload a torrent missing these, then someone may re-name the files and trump your torrent.
+
+When ripping or converting, consider using one of the following:
+
+%A - %T (%y) [%f]/%n %t
+
+or
+%A - %y - %T [%f]/%n %t
+
+(Click the Custom radio button to enter text.) Either of these codes will create a folder for you and put the tracks in it.
+
+Note that %f isn't always all that useful, as discussed in the hidden text below.
+Hidden text: Show
+
+For compilations, you could use
+
+%A - %T (%y) [%f]/%n - %a - %t
+
+which adds the track artist to each track name.
+
+You can choose from the following options, detailed in the hidden text below. 
+Hidden text: Show
+
+(2) Set the filename option to Overwrite.
+
+(3) In this tab, you may also specify character replacements, which are useful since certain operating systems have a restricted character set that cannot be used in file names. While OS X may handle these characters perfectly well, other operating systems, such as Windows, will not allow for these characters in the file names. This restricted character set corresponds to the redacted.ch illegal characters as present on upload.php.
+
+https://ptpimg.me/u0go1f.png
+
+3. Now we move on to the Batch tab. It is useful when converting nested directories, such as one folder that contains two more folders with tracks you wish to convert. 
+You can drag the main folder onto XLD's dock icon and it will batch-convert the folders.
+(1) Check the Preserve directory structures box.
+(2) Set Subdirectory search depth to 0.
+(3) Optionally, check the Automatically split file with embedded cue sheet box. Single-track rips are beyond the scope of this article, as unsplit lossless albums are not allowed on What.CD.
+
+
+https://ptpimg.me/75y3n1.png
+
+4. The CDDB tab can be left alone. You may edit the settings if you feel so inclined.
+
+5. In the Metadata tab, you choose whether or not you want to embed album artwork into files. The only RED rule concerning embedded artwork states that embedded images should be kept [url=rules.html?p=upload#r2.3.19]below 512KB[/url].
+To avoid the problem entirely, and to give downloaders the choice to handle tags as they want, you may simply choose to not embed album artwork.
+(1) Uncheck the Embed cover art images into files box, if you choose.
+(2) Uncheck the Set the Compilation flag automatically box.
+(3) Edit tags before convert will force XLD to prompt you to review and edit tags before making any conversions, including ripping CDs. Check the box if you choose.
+(4) It is generally okay to leave the Preserve unknown metadata if possible box checked, but you may disable it if you choose.
+
+
+https://ptpimg.me/vobme0.png
+
+6: CD Rip tab
+These settings are crucial to obtaining an exact copy of a disc, and the importance is quantized in the logchecker's assessment of your extraction log. Read more about the automated logchecker in this wiki article
+(1) Use the XLD Secure Ripper Mode.
+(2) XLD should be able to read your drive's Read sample offset correction value automatically. Click the black triangle next to the field to display your drive(s). You can look up your drive in AccurateRip drive offset database. NOTE: Matsushita brand drives are listed as Panasonic in the AccurateRip list. Normally, however, XLD can find your drive's offset, so this step is usually unnecessary.
+(3) If your drive's read offset is correct, then XLD will try to search the AccurateRip database to verify the integrity of your rip by comparing it to the rips of other people. See http://www.accuraterip.com/ for more information. DO NOT check the "Treat AccurateRip mismatch as an inconsistency in log" box.
+(4) Always save a log file and cue. Without a log, there is no easy way to verify the quality of your rip.
+(5) Verify suspicious sectors.
+The logchecker will deduct points if this box is unchecked. Without this setting, your log score will be decreased by 5 points.
+(6) Always enable Test before copy (also called test-and-copy).
+(7) Check the Scan ReplayGain box. Regardles of whether you prefer ReplayGain tags in your music files, ReplayGain should be enabled here. XLD will not add ReplayGain tags to the FLAC files, but it will include peak level information in the ripping log. This is used to help differentiate the different pressings of discs.
+
+
+https://ptpimg.me/79oh00.png
+
+2. Ripping
+
+Now that we have configured XLD, we can finally begin ripping CDs. Once you have XLD configured once, you can jump straight to here each time you want to rip a disc.
+
+1. Insert the CD into your drive and open XLD (not necessarily in that order).
+
+2. Go to File menu > Open Audio CD
+
+https://ptpimg.me/6eo78y.png
+
+3. XLD will now detect pre-gaps for the disc.
+
+https://ptpimg.me/4m6i24.png
+
+https://ptpimg.me/jql87g.png
+
+4. Add tags. Go to CDBB menu > Query Items > and choose the options you would like. It is recommended to not embed artwork, as it may be of low quality or incorrect. It is simplest to include the album cover as an image in your torrent directory, e.g. a cover.jpg or folder.jpg.
+
+https://ptpimg.me/138kmx.png
+
+Then, go to CDBB menu > Get CD Track Names to check MusicBrainz and/or FreeDB for tags.
+
+https://ptpimg.me/w4647f.png
+
+If tags are not found or are incorrect, then manually enter the correct tags. 
+
+https://ptpimg.me/j8grb4.png
+
+You can now enter the artist, album title, year, and disc number automatically for all tracks. Click OK when done.
+
+https://ptpimg.me/mof5c5.png
+
+Then, click the first track to select it, and then hit Command-I again (or go to File menu > Edit Metadata). Enter the correct track title for the first track, then click Next, then enter the correct track title for the second track, then click Next, then.... Repeat until all track titles are entered, and click OK.
+
+
+At the bottom of this screen before you rip you should select the option "Include pre-gap except for HTOA." If a CD you rip has hidden track one audio, or a track hidden in the pre-gap (or even simply some empty space as is quite common, and illustrated in this example), this option will cause XLD to rip like EAC and not include the pre-gap audio in the first track.
+
+https://ptpimg.me/961rt4.png
+
+Note: If you need to extract the hidden track one audio (HTOA), rip the track again using the option "Include pre-gap for all tracks." This will make XLD rip starting at sector 0 where a hidden track would be instead of where the regular first track begins. Ripping as a single file is another way to extract pre-gap audio, but should be avoided if you are doing just a normal CD rip, as a single file rip will not be scored 100%. It is suggested you do this after copying your first rip elsewhere as not to over-write anything you've already done. You may then split the 'Track 0' out from this track 0+1 file using other means and may include it in your upload.
+
+5. Click open, and XLD will begin extraction. A new window named Progess will appear. XLD will rip the first track once (as a test), and then rip it again (as the copy saved to your disk). The CRCs for both tracks will be written to the log file and checked against the AccurateRip database, if your disc is found. Extraction may take anywhere from 30 minutes to over an hour, depending on your drive, the length of the disc, and the condition of the disc.
+
+https://ptpimg.me/961rt4.png
+
+When the extraction has finished, a new window named Log appears. Because you have told XLD to always save a log file, you can close this window. The log file will appear in same folder as the FLAC files and cue sheet.
+
+
+3. Log Analysis
+
+Main things to look for:
+
+The main things you need to look for are log errors, the test CRC hash, the actual rip CRC hash, and AccurateRip results to justify the CRC values from the test and rip.
+
+LOG CONSOLIDATION WARNING
+
+
+THIS IN NO WAY MEANS that you are free to consolidate logs by opening up your original rip log and substituting the faulty rip results with the re-ripped track results. When XLD outputs your original log and any additional track-specific rip logs, DO NOT OPEN THE LOGS. Include all logs for this album in your torrent folder and upload each log individually to the site on the upload page. The site will have no problems reading these logs correctly.
+
+AccurateRip
+
+
+AccurateRip may or may not confirm whether an album has been ripped properly: there are false negatives from previous poor submissions, false positives (rarely) from identical bad rips, and many, many albums with no data at all. This is why it the "Treat AccurateRip mismatch as an inconsistency in log" box should be left unchecked.
+
+AccurateRip should always be enabled. Not only does it mean that you have configured (some) settings correctly, it should also mean that your drive's offset is correct. AccurateRip matches in the ripping log can suggest that your rip is "accurate". If you have enabled AccurateRip and the CD you are trying to rip is in its database, "AccurateRip: YES" will appear in the bottom left of the disc track list window. (In older XLD versions, [AR] appears in the window's title bar before the disc title.) 
+
+XLD cannot currently submit rip results to the AccurateRip database.
+
+Errors (CDParanoia III 10.2 Ripper Mode)
+
+
+Sometimes you may get errors in ripping your tracks. Some are still acceptable if you only see a few of them. Other errors are not as good, and they indicate unrecoverable problems with your rips. Because XLD uses CDparanoia, logs may sometimes list a number of errors, and they still report the "No errors occurred / End of status report" message at the end. This is similar to a proper EAC rip that reports one or more track quality values of under 100%.
+
+Major errors
+
+
+If you have any of these, you should re-rip those tracks with the errors.
+
+Read error
+Skipped (treated as error)
+Inconsistency in error sectors
+
+
+Acceptable errors
+
+
+These errors are common and most often can be fixed by cdparanoia. They will not affect the quality of your rips. These are labeled as "(maybe fixed)" in the log.
+
+Edge jitter error
+Atom jitter error
+Drift Error
+Dropped bytes error
+Duplicated bytes error
+
+
+Conclusion
+
+
+If your CRCs match up and you don't have any of the "bad" errors that are listed above, then your rip is considered good. AccurateRip isn't that relevant to your rip as things can interfere with the quality of AccurateRip results as stated above. A rip that only has Edge, Atom, Drop, Drift, or Dupe "maybe fixed" errors is most likely clean.
